@@ -19,10 +19,15 @@ public class MemberController {
     private final StudentService studentService;
 
     @GetMapping("/students/{studentId}")
-    public Student getStudent(@PathVariable Long studentId) {
+    public ResponseEntity<Student> getStudent(@PathVariable Long studentId) {
         Optional<Student> student = studentService.searchStudent(studentId);
-
-        return student.orElse(null);
+        System.out.println(student.isPresent());
+        if (student.isPresent()) {
+            return ResponseEntity.ok()
+                    .body(student.get());
+        }
+        return ResponseEntity.ok()
+                .body(null);
     }
 
     @PostMapping("/students")
